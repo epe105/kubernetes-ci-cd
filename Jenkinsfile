@@ -16,17 +16,21 @@ node {
     
         sh "docker build -t ${imageName} -f applications/hello-kenzan/Dockerfile applications/hello-kenzan"
     
-    stage "Run Tests"
+    stage "Run Unit and Security Tests"
     
         sh "echo tests complete"
 
-    stage "Push"
+    stage "Push Image to Registry"
 
         sh "docker push ${imageName}"
 
-    stage "Promote to PROD"
+    stage "Deploy to QA"
     
-        input message: "Promote to PROD?", ok: "Promote"
+        sh "echo deploy to QA"        
+
+    stage "Promote to PROD"
+
+        input message: "Security and Compliance have Passed.  Promote to PROD?", ok: "Promote"
 
     stage "Deploy"
 
