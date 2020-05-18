@@ -16,10 +16,20 @@ node {
     
         sh "docker build -t ${imageName} -f applications/hello-kenzan/Dockerfile applications/hello-kenzan"
     
+    stage "Run Tests"
+    
+        sh "echo tests complete"
+
     stage "Push"
 
         sh "docker push ${imageName}"
 
+    stage "Promote to PROD"
+        steps {
+        timeout(time:15, unit:'MINUTES') {
+            input message: "Promote to PROD?", ok: "Promote"
+            }
+        }
     stage "Deploy"
 
         kubernetesDeploy configs: "applications/${appName}/k8s/*.yaml", kubeconfigId: 'kenzan_kubeconfig'
