@@ -16,7 +16,11 @@ node {
     
         sh "docker build -t ${imageName} -f applications/hello-kenzan/Dockerfile applications/hello-kenzan"
     
-    stage "Run Unit and Security Tests"
+    stage "Run Unit Tests"
+    
+        sh "echo tests complete"
+
+    stage "Run Security Tests"
     
         sh "echo tests complete"
 
@@ -30,9 +34,9 @@ node {
 
     stage "Promote to PROD"
 
-        input message: "Security and Compliance have Passed.  Promote to PROD?", ok: "Promote"
+        input message: "Security and Compliance Test have Passed.  Promote to PROD?", ok: "Promote"
 
-    stage "Deploy"
+    stage "Deploy to PROD"
 
         kubernetesDeploy configs: "applications/${appName}/k8s/*.yaml", kubeconfigId: 'kenzan_kubeconfig'
 
