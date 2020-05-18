@@ -25,11 +25,9 @@ node {
         sh "docker push ${imageName}"
 
     stage "Promote to PROD"
-        steps {
-        timeout(time:15, unit:'MINUTES') {
-            input message: "Promote to PROD?", ok: "Promote"
-            }
-        }
+    
+        input message: "Promote to PROD?", ok: "Promote"
+
     stage "Deploy"
 
         kubernetesDeploy configs: "applications/${appName}/k8s/*.yaml", kubeconfigId: 'kenzan_kubeconfig'
